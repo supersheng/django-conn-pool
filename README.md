@@ -22,32 +22,6 @@ pip install mysqlclient
 pip install SQLAlchemy
 ```
 
-**core code**:
-
-```
-import MySQLdb as Database
-import sqlalchemy.pool as pool
-from sqlalchemy.pool import QueuePool
-from django.db.backends.mysql.base import DatabaseWrapper as _DatabaseWrapper
-
-
-Database = pool.manage(Database, poolclass=QueuePool, **settings.SQLALCHEMY_QUEUEPOOL)
-
-class DatabaseWrapper(_DatabaseWrapper):
-    def get_new_connection(self, conn_params):
-        # return a mysql connection
-        conn_params = settings.DATABASES['default']
-        return Database.connect(
-            host=conn_params['HOST'],
-            port=conn_params['PORT'],
-            user=conn_params['USER'],
-            db=conn_params['NAME'],
-            passwd=conn_params['PASSWORD'],
-            use_unicode=True,
-            charset='utf8',
-        )
-```
-
 ### Usage
 
 ```
@@ -64,7 +38,6 @@ SQLALCHEMY_QUEUEPOOL = {
     'max_overflow': 10,
     'timeout': 5,
     'recycle': 119,
-    'echo': False,
 }
 
 DATABASES = {
